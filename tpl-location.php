@@ -75,34 +75,24 @@
 
 					endwhile;
 
-
 					$distances = array();
-
-
 					foreach ( $locations as $key => $location ) {
-
-						$a        = $base_location['lat'] - $location['lat'];
-						$b        = $base_location['lng'] - $location['lng'];
-						$distance = sqrt( ( $a ** 2 ) + ( $b ** 2 ) );
-
+						$a                 = $base_location['lat'] - $location['lat'];
+						$b                 = $base_location['lng'] - $location['lng'];
+						$distance          = sqrt( ( $a ** 2 ) + ( $b ** 2 ) );
 						$distances[ $key ] = $distance;
-
-
 					}
 
 
 					asort( $distances );
 
-					$length = sizeof( $distances );
 
-					for ( $x = 0; $x < $length; $x ++ ) {
+					$keys_list = array_keys( $distances );
 
+					foreach ( $keys_list as $key_item ) {
+						$location_name = ( $locations[ $key_item ]['name'] );
+						echo $location_name.'<br>';
 					}
-
-
-					$closest = $locations[ key( $distances ) ];
-
-					echo $closest['name'];
 
 
 					wp_reset_postdata();
