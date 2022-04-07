@@ -17,10 +17,8 @@
 				<?php
 
 
-					$latitude  = get_post_meta( get_the_ID(), 'latitude', true );
-					$longitude = get_post_meta( get_the_ID(), 'longitude', true );
-
-
+					$latitude      = get_post_meta( get_the_ID(), 'latitude', true );
+					$longitude     = get_post_meta( get_the_ID(), 'longitude', true );
 					$country_title = get_the_title();
 				?>
 
@@ -47,50 +45,64 @@
 					$the_query = new WP_Query( $args );
 
 
-					$locations = array();
+					$locations = array(
+						array(
+							'name' => '',
+							'lat'  => '',
+							'lng'  => ''
+						)
+					);
 
 
-
-					echo '<h3>' . 'Top Five Nearest Location' . '</h3>';
+					echo '<h3>' . ' Nearest Location' . '</h3>';
+					$count = 0;
 
 
 					while ( $the_query->have_posts() ) : $the_query->the_post();
 						$latitude  = get_post_meta( get_the_ID(), 'latitude', true );
 						$longitude = get_post_meta( get_the_ID(), 'longitude', true );
 
+						if ( $base_location['lat'] != $latitude ) {
 
-						$locations = array(
-							array(
-								"name" => get_the_title(),
-								"lat"  => $latitude,
-								"lng"  => $longitude
-							)
-						);
-						$distances = array();
-
-						foreach ( $locations as $key => $location ) {
-							$a                 = $base_location['lat'] - $location['lat'];
-							$b                 = $base_location['lng'] - $location['lng'];
-							$distance          = sqrt( ( $a ** 2 ) + ( $b ** 2 ) );
-							$distances[ $key ] = $distance;
+							$locations[ $count ]['name'] = get_the_title();
+							$locations[ $count ]['lat']  = $latitude;
+							$locations[ $count ]['lng']  = $longitude;
 						}
 
 
-						asort( $distances );
-
-
-
-
-						$closest = $locations[ key( $distances ) ];
-
-
-						if ( $country_title != $closest['name'] ) {
-
-							echo $closest['name'] . '<br>';
-						}
+						$count ++;
 
 
 					endwhile;
+
+
+					$distances = array();
+
+
+					foreach ( $locations as $key => $location ) {
+
+						$a        = $base_location['lat'] - $location['lat'];
+						$b        = $base_location['lng'] - $location['lng'];
+						$distance = sqrt( ( $a ** 2 ) + ( $b ** 2 ) );
+
+						$distances[ $key ] = $distance;
+
+
+					}
+
+
+					asort( $distances );
+
+					$length = sizeof( $distances );
+
+					for ( $x = 0; $x < $length; $x ++ ) {
+
+					}
+
+
+					$closest = $locations[ key( $distances ) ];
+
+					echo $closest['name'];
 
 
 					wp_reset_postdata();
