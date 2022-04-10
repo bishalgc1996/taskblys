@@ -15,11 +15,8 @@
         <div class="container">
             <div class="row">
 				<?php
-
-
-					$latitude      = get_post_meta( get_the_ID(), 'latitude', true );
-					$longitude     = get_post_meta( get_the_ID(), 'longitude', true );
-					$country_title = get_the_title();
+					$latitude  = floatval( get_post_meta( get_the_ID(), 'latitude', true ) );
+					$longitude = floatval( get_post_meta( get_the_ID(), 'longitude', true ) );
 				?>
 
                 <p>Latitude: <?php echo $latitude; ?> </p>
@@ -77,8 +74,12 @@
 
 					$distances = array();
 					foreach ( $locations as $key => $location ) {
-						$a                 = $base_location['lat'] - $location['lat'];
-						$b                 = $base_location['lng'] - $location['lng'];
+						$lat_num  = floatval( $location['lat'] );
+						$long_num = floatval( $location['lng'] );
+
+
+						$a                 = $base_location['lat'] - $lat_num;
+						$b                 = $base_location['lng'] - $long_num;
 						$distance          = sqrt( ( $a ** 2 ) + ( $b ** 2 ) );
 						$distances[ $key ] = $distance;
 					}
@@ -91,7 +92,7 @@
 
 					foreach ( $keys_list as $key_item ) {
 						$location_name = ( $locations[ $key_item ]['name'] );
-						echo $location_name.'<br>';
+						echo $location_name . '<br>';
 					}
 
 
